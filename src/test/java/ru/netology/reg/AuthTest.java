@@ -24,7 +24,7 @@ class AuthTest {
     @Test
     @DisplayName("Should Successful User")
     void shouldSucessfulUser() {
-        var registerdUser = getRegisterdUser("active");
+        var registerdUser = getRegisteredUser("active");
     }
 
 
