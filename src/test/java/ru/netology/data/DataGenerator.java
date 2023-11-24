@@ -35,7 +35,7 @@ public class DataGenerator {
     private DataGenerator() {
     }
 
-    private static ?????? (?????) {
+    private static RegistrationDto ??????? (RegistrationDto user) {
         given()
                 .spec(requestSpec) // указываем, какую спецификацию используем
                 .body(user) // передаём в теле объект, который будет преобразован в JSON
@@ -60,17 +60,17 @@ public class DataGenerator {
         private Registration() {
         }
 
-        public static Registration getUser (String status) {
+        public static RegistrationDto getUser (String status) {
             return new Registration(getRandomLogin(), getRandomPassword(), status);
         }
 
-        public static UserInfo getRegisteredUser(String status) {
-            return UserInfo(getUser(status));
+        public static RegistrationDto getRegisteredUser(String status) {
+            return ??????? (getUser(status));
         }
     }
 
     @Value
-    public static class UserInfo {
+    public static class RegistrationDto {
         String login;
         String password;
         String status;
