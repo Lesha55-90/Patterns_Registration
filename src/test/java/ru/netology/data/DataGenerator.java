@@ -3,15 +3,21 @@ package ru.netology.data;
 
 import com.github.javafaker.Faker;
 import io.restassured.internal.ValidatableResponseOptionsImpl;
+import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import io.restassured.response.ResponseOptions;
 import io.restassured.response.ValidatableResponseOptions;
+import jdk.jfr.Registered;
 import lombok.Value;
 
 import java.util.Locale;
 import java.util.Random;
 
 import static io.restassured.RestAssured.given;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
 
 public class DataGenerator {
 
@@ -29,7 +35,7 @@ public class DataGenerator {
     private DataGenerator() {
     }
 
-    private static RegistrationDto (RegistrationDto user) {
+    private static ?????? (?????) {
         given()
                 .spec(requestSpec) // указываем, какую спецификацию используем
                 .body(user) // передаём в теле объект, который будет преобразован в JSON
@@ -41,36 +47,26 @@ public class DataGenerator {
     }
 
 
-
-
-    public static String generateLogin(String locale) {
-        var faker = new Faker(new Locale(locale));
+    public static String getRandomLogin () {
         return faker.name().username();
     }
 
-    public static String generatePassword(String locale) {
-        var faker = new Faker(new Locale(locale));
+    public static String getRandomPassword() {
         return faker.phoneNumber().phoneNumber();
-    }
-
-    public static String generateStatus() {
-        var status = new String[]{
-                "active", "blocked"
-        };
-        return status[new Random().nextInt(status.length)];
     }
 
 
     public static class Registration {
         private Registration() {
-
         }
 
-        public static UserInfo generateUser(String locale) {
-            return new UserInfo(generateLogin(locale), generatePassword(locale), generateStatus());
-
+        public static Registration getUser (String status) {
+            return new Registration(getRandomLogin(), getRandomPassword(), status);
         }
 
+        public static UserInfo getRegisteredUser(String status) {
+            return UserInfo(getUser(status));
+        }
     }
 
     @Value

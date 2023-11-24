@@ -1,6 +1,14 @@
 package ru.netology.reg;
 
 
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
+import org.junit.jupiter.api.BeforeAll;
+
+import static io.restassured.RestAssured.given;
+
 // спецификация нужна для того, чтобы переиспользовать настройки в разных запросах
 class AuthTest {
     private static RequestSpecification requestSpec = new RequestSpecBuilder()
