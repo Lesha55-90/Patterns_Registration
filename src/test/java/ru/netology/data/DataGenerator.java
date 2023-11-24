@@ -1,23 +1,17 @@
 package ru.netology.data;
 
-
 import com.github.javafaker.Faker;
-import io.restassured.internal.ValidatableResponseOptionsImpl;
-import io.restassured.response.Response;
-import io.restassured.response.ResponseBody;
-import io.restassured.response.ResponseOptions;
-import io.restassured.response.ValidatableResponseOptions;
-import jdk.jfr.Registered;
-import lombok.Value;
-
-import java.util.Locale;
-import java.util.Random;
 
 import static io.restassured.RestAssured.given;
+
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+
+import java.util.Locale;
+
+import lombok.Value;
 
 public class DataGenerator {
 
@@ -28,52 +22,56 @@ public class DataGenerator {
             .setContentType(ContentType.JSON)
             .log(LogDetail.ALL)
             .build();
-    private static Faker faker = new Faker(new Locale("en"));
 
+    private static Faker faker = new Faker(new Locale("en"));
 
 
     private DataGenerator() {
     }
 
-    private static RegistrationDto sendRequest (RegistrationDto user) {
-        given()
-                .spec(requestSpec) // указываем, какую спецификацию используем
-                .body(user) // передаём в теле объект, который будет преобразован в JSON
-                .when() // "когда"
-                .post("/api/system/users") // на какой путь относительно BaseUri отправляем запрос
-                .then() // "тогда ожидаем"
-                .statusCode(200); // код 200 OK
-        return user;
-    }
-
-
-    public static String getRandomLogin () {
-        return faker.name().username();
-    }
-
-    public static String getRandomPassword() {
-        return faker.phoneNumber().phoneNumber();
-    }
-
-
     public static class Registration {
         private Registration() {
         }
 
-        public static RegistrationDto getUser (String status) {
-            return new RegistrationDto(getRandomLogin(), getRandomPassword(), status);
+
+        public static void sendRequest(RegistrationUser user) {
+            given() // "дано"
+                    .spec(requestSpec) // указываем, какую спецификацию используем
+                    .body(user) // передаём в теле объект, который будет преобразован в JSON
+                    .when() // "когда"
+                    .post("/api/system/users") // на какой путь, относительно BaseUri отправляем запрос
+                    .then() // "тогда ожидаем"
+                    .statusCode(200); // код 200 OK
         }
 
-        public static RegistrationDto getRegisteredUser(String status) {
-            return sendRequest (getUser(status));
+        public static String getRandomLogin() {
+            String login = faker.name().username();
+            return login;
+        }
+
+        public static String getRandomPassword() {
+            String password = faker.internet().password();
+            return password;
+        }
+
+        public static RegistrationUser getUser(String status) {
+            RegistrationUser user = new RegistrationUser(getRandomLogin(), getRandomPassword(), status);
+            return user;
+        }
+
+        public static RegistrationUser getRegisteredUser(String status) {
+            RegistrationUser registeredUser = getUser(status);
+            sendRequest(registeredUser);
+            return registeredUser;
         }
     }
 
     @Value
-    public static class RegistrationDto {
-        String login;
-        String password;
-        String status;
+    public static class RegistrationUser {
+        private String login;
+        private String password;
+        private String status;
     }
+
 
 }
